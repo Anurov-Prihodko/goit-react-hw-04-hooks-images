@@ -1,51 +1,42 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import shortid from 'shortid';
 import s from './ImageGalleryItem.module.css';
 import Modal from '../Modal';
 
-export default class ImageGalleryItem extends Component {
-  state = {
-    imgIdx: null,
-    showModal: false,
+export default function ImageGalleryItem({ images }) {
+  const [imgIdx, setImgIdx] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleClick = index => {
+    setImgIdx(index);
+    setShowModal(true);
   };
 
-  handleClick(index) {
-    this.setState({ imgIdx: index, showModal: true });
-  }
-
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-    }));
+  const toggleModal = () => {
+    setShowModal(() => !showModal);
   };
 
-  render() {
-    const { images } = this.props;
-    const { imgIdx, showModal } = this.state;
-
-    return (
-      <>
-        {images.map(({ webformatURL, tags }, index) => (
-          <li
-            key={shortid.generate()}
-            className={s.item}
-            onClick={() => this.handleClick(index)}
-          >
-            <img src={webformatURL} alt={tags} className={s.image} />
-          </li>
-        ))}
-        {showModal && (
-          <Modal onClose={this.toggleModal}>
-            <img src={images[imgIdx].largeImageURL} alt={images[imgIdx].tags} />
-          </Modal>
-        )}
-      </>
-    );
-  }
+  return (
+    <>
+      {images.map(({ webformatURL, tags }, index) => (
+        <li
+          key={shortid.generate()}
+          className={s.item}
+          onClick={() => handleClick(index)}
+        >
+          <img src={webformatURL} alt={tags} className={s.image} />
+        </li>
+      ))}
+      {showModal && (
+        <Modal onClose={toggleModal}>
+          <img src={images[imgIdx].largeImageURL} alt={images[imgIdx].tags} />
+        </Modal>
+      )}
+    </>
+  );
 }
 
 ImageGalleryItem.propTypes = {
   images: PropTypes.array.isRequired,
-  key: PropTypes.number,
 };

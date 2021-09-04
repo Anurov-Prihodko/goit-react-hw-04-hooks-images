@@ -73,16 +73,7 @@ class App extends Component {
           icon: '🚀',
         });
       })
-      // .then(() => {
-      //   if (numPage !== 1) {
-      //     window.scrollTo({
-      //       top: document.documentElement.scrollHeight,
-      //       behavior: 'smooth',
-      //     });
-      //   }
-      // })
       .catch(error => this.setState({ error, status: Status.REJECTED }));
-    // .finally(() => this.setState({ status: Status.IDLE }));
   };
 
   handleFormSubmit = requestName => {
